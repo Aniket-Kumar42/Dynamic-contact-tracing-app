@@ -1,0 +1,135 @@
+{
+  "P1": {
+    "age": 23,
+    "contacts": [
+      "p4",
+      "p5",
+      "p9",
+      "p10"
+    ],
+    "location": "Patna",
+    "name": "Aniket",
+    "status": "healthy"
+  },
+  "P2": {
+    "age": 20,
+    "contacts": [
+      "p5",
+      "p6",
+      "p9",
+      "p10",
+      "p4"
+    ],
+    "location": "Lucknow",
+    "name": "Amit",
+    "status": "healthy"
+  },
+  "p10": {
+    "age": 21,
+    "contacts": [
+      "P2",
+      "P1"
+    ],
+    "location": "Patna",
+    "name": "Rohit",
+    "status": "healthy"
+  },
+  "p11": {
+    "age": 20,
+    "contacts": [],
+    "location": "India",
+    "name": "new",
+    "status": "healthy"
+  },
+  "p3": {
+    "age": 21,
+    "contacts": [
+      "p5",
+      "p6",
+      "p7",
+      "p4"
+    ],
+    "location": "Jhansi",
+    "name": "Tanul",
+    "status": "healthy"
+  },
+  "p4": {
+    "age": 20,
+    "contacts": [
+      "P2",
+      "p3",
+      "P1"
+    ],
+    "location": "Siwan",
+    "name": "Atif",
+    "status": "healthy"
+  },
+  "p5": {
+    "age": 21,
+    "contacts": [
+      "P2",
+      "p3",
+      "p8",
+      "P1"
+    ],
+    "location": "MP",
+    "name": "Parth",
+    "status": "healthy"
+  },
+  "p6": {
+    "age": 20,
+    "contacts": [
+      "P2",
+      "p3"
+    ],
+    "location": "Punjab",
+    "name": "Palak",
+    "status": "healthy"
+  },
+  "p7": {
+    "age": 20,
+    "contacts": [
+      "p3"
+    ],
+    "location": "UP",
+    "name": "Shikhar",
+    "status": "healthy"
+  },
+  "p8": {
+    "age": 21,
+    "contacts": [
+      "p5"
+    ],
+    "location": "Punjab",
+    "name": "Vedika",
+    "status": "healthy"
+  },
+  "p9": {
+    "age": 21,
+    "contacts": [
+      "P2",
+      "P1"
+    ],
+    "location": "Varanasi",
+    "name": "Arya",
+    "status": "healthy"
+  },
+  "u1": {
+    "age": 30,
+    "contacts": [
+      "u2"
+    ],
+    "location": "",
+    "name": "Alice",
+    "status": "infected"
+  },
+  "u2": {
+    "age": 25,
+    "contacts": [
+      "u1"
+    ],
+    "location": "",
+    "name": "Bob",
+    "status": "exposed"
+  }
+}
