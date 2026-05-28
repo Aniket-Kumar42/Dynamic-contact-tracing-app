@@ -41,7 +41,8 @@ function updateToggleUI() {
 
 // Load messages for the user
 async function loadMessages() {
-  const res = await fetch('http://127.0.0.1:5000/getMessages', {
+  await window.configPromise;
+  const res = await fetch(`${window.API_URL}/getMessages`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: userId })
@@ -64,8 +65,9 @@ async function loadMessages() {
 
 // Fetch and display profile, status, risk
 async function loadProfile() {
+  await window.configPromise;
   // Get exposure graph for user info
-  const res = await fetch('http://127.0.0.1:5000/getExposureGraph', {
+  const res = await fetch(`${window.API_URL}/getExposureGraph`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: userId })
@@ -97,9 +99,10 @@ async function loadProfile() {
 
 // Toggle infection status
 infectionToggleBtn.onclick = async () => {
+  await window.configPromise;
   if (!isInfected) {
     // Mark as infected
-    const res = await fetch('http://127.0.0.1:5000/markInfected', {
+    const res = await fetch(`${window.API_URL}/markInfected`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: userId })
@@ -107,7 +110,7 @@ infectionToggleBtn.onclick = async () => {
     const data = await res.json();
     if (data.status === 'ok') {
       // Send automatic infection alert to contacts
-      const alertRes = await fetch('http://127.0.0.1:5000/sendInfectionAlert', {
+      const alertRes = await fetch(`${window.API_URL}/sendInfectionAlert`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: userId })
@@ -123,7 +126,7 @@ infectionToggleBtn.onclick = async () => {
     }
   } else {
     // Unmark as infected
-    const res = await fetch('http://127.0.0.1:5000/unmarkInfected', {
+    const res = await fetch(`${window.API_URL}/unmarkInfected`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: userId })
@@ -146,9 +149,10 @@ refreshBtn.onclick = loadProfile;
 // Add contacts
 addContactForm.onsubmit = async (e) => {
   e.preventDefault();
+  await window.configPromise;
   const ids = contactIdsInput.value.split(',').map(s => s.trim()).filter(Boolean);
   if (!ids.length) return;
-  const res = await fetch('http://127.0.0.1:5000/addContact', {
+  const res = await fetch(`${window.API_URL}/addContact`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: userId, contacts: ids })
@@ -166,9 +170,10 @@ addContactForm.onsubmit = async (e) => {
 // Remove contacts
 removeContactForm.onsubmit = async (e) => {
   e.preventDefault();
+  await window.configPromise;
   const ids = removeContactIdsInput.value.split(',').map(s => s.trim()).filter(Boolean);
   if (!ids.length) return;
-  const res = await fetch('http://127.0.0.1:5000/removeContact', {
+  const res = await fetch(`${window.API_URL}/removeContact`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: userId, contacts: ids })

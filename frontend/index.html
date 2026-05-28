@@ -24,6 +24,7 @@
     </form>
     <div id="message" class="mt-4 text-center text-red-600"></div>
   </div>
+  <script src="js/config.js"></script>
   <script>
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
@@ -49,8 +50,9 @@
 
     loginForm.onsubmit = async (e) => {
       e.preventDefault();
+      await window.configPromise;
       const id = document.getElementById('login-id').value;
-      const res = await fetch('http://127.0.0.1:5000/login', {
+      const res = await fetch(`${window.API_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id })
@@ -66,11 +68,12 @@
 
     registerForm.onsubmit = async (e) => {
       e.preventDefault();
+      await window.configPromise;
       const id = document.getElementById('register-id').value;
       const name = document.getElementById('register-name').value;
       const age = document.getElementById('register-age').value;
       const location = document.getElementById('register-location').value;
-      const res = await fetch('http://127.0.0.1:5000/register', {
+      const res = await fetch(`${window.API_URL}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, name, age: Number(age), location })
