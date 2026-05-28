@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Tracing Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/cytoscape@3.26.0/dist/cytoscape.min.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <div class="container mx-auto py-8">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold">Contact Tracing Dashboard</h1>
+      <button id="logout-btn" class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Logout</button>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Profile & Status -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-4">My Profile</h2>
+        <div id="profile-info" class="mb-4 text-gray-700"></div>
+        <div class="mb-4">
+          <span class="font-semibold">Infection Status:</span>
+          <span id="infection-status" class="ml-2 px-2 py-1 rounded"></span>
+        </div>
+        <!-- Toggle Switch for Infection Status -->
+        <div class="flex items-center mb-4">
+          <div id="infection-toggle-container" class="flex-1 bg-green-500 rounded-lg px-4 py-3 transition-colors duration-300">
+            <span class="text-black font-medium">Mark myself as infected</span>
+          </div>
+          <button id="infection-toggle-btn" class="ml-3 bg-gray-300 w-12 h-6 rounded-full relative transition-colors duration-300">
+            <div id="toggle-slider" class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-300"></div>
+          </button>
+        </div>
+        <button id="refresh-btn" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Refresh</button>
+      </div>
+      <!-- Add Contacts & Alerts -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-4">Contacts & Alerts</h2>
+        <form id="add-contact-form" class="flex mb-4 space-x-2">
+          <input type="text" id="contact-ids" class="flex-1 px-3 py-2 border rounded" placeholder="Contact User IDs (comma separated)" required>
+          <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Add</button>
+        </form>
+        <form id="remove-contact-form" class="flex mb-4 space-x-2">
+          <input type="text" id="remove-contact-ids" class="flex-1 px-3 py-2 border rounded" placeholder="Contact User IDs to remove (comma separated)" required>
+          <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Remove</button>
+        </form>
+        <div id="alert-message" class="mt-4 text-green-700"></div>
+      </div>
+    </div>
+    <!-- Messages Section -->
+    <div class="bg-white rounded-lg shadow p-6 mt-8">
+      <h2 class="text-xl font-semibold mb-4">Messages</h2>
+      <div id="messages-container" class="border rounded-lg p-4 min-h-32 bg-gray-50">
+        <div id="messages-content" class="text-gray-600">No message received</div>
+      </div>
+    </div>
+    <!-- Graph Visualization -->
+    <div class="bg-white rounded-lg shadow p-6 mt-8">
+      <h2 class="text-xl font-semibold mb-4">Exposure Graph (up to 2 levels)</h2>
+      <div id="cy" class="w-full h-96 border rounded"></div>
+    </div>
+    <!-- Notifications -->
+    <div id="notification" class="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded shadow-lg hidden"></div>
+  </div>
+  <script src="js/graph.js"></script>
+</body>
+</html>

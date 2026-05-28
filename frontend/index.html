@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Tracing App - Login/Register</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+    <h2 class="text-2xl font-bold mb-6 text-center" id="form-title">Login</h2>
+    <form id="login-form" class="space-y-4">
+      <input type="text" id="login-id" class="w-full px-3 py-2 border rounded" placeholder="User ID" required>
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Login</button>
+      <p class="text-sm text-center mt-2">Don't have an account? <a href="#" class="text-blue-600" id="show-register">Register</a></p>
+    </form>
+    <form id="register-form" class="space-y-4 hidden">
+      <input type="text" id="register-id" class="w-full px-3 py-2 border rounded" placeholder="User ID" required>
+      <input type="text" id="register-name" class="w-full px-3 py-2 border rounded" placeholder="Name" required>
+      <input type="number" id="register-age" class="w-full px-3 py-2 border rounded" placeholder="Age" required>
+      <input type="text" id="register-location" class="w-full px-3 py-2 border rounded" placeholder="Location (optional)">
+      <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">Register</button>
+      <p class="text-sm text-center mt-2">Already have an account? <a href="#" class="text-green-600" id="show-login">Login</a></p>
+    </form>
+    <div id="message" class="mt-4 text-center text-red-600"></div>
+  </div>
+  <script>
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const showRegister = document.getElementById('show-register');
+    const showLogin = document.getElementById('show-login');
+    const formTitle = document.getElementById('form-title');
+    const message = document.getElementById('message');
+
+    showRegister.onclick = (e) => {
+      e.preventDefault();
+      loginForm.classList.add('hidden');
+      registerForm.classList.remove('hidden');
+      formTitle.textContent = 'Register';
+      message.textContent = '';
+    };
+    showLogin.onclick = (e) => {
+      e.preventDefault();
+      registerForm.classList.add('hidden');
+      loginForm.classList.remove('hidden');
+      formTitle.textContent = 'Login';
+      message.textContent = '';
+    };
+
+    loginForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('login-id').value;
+      const res = await fetch('http://127.0.0.1:5000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      const data = await res.json();
+      if (data.status === 'ok') {
+        localStorage.setItem('userId', id);
+        window.location.href = 'dashboard.html';
+      } else {
+        message.textContent = data.msg || 'Login failed.';
+      }
+    };
+
+    registerForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('register-id').value;
+      const name = document.getElementById('register-name').value;
+      const age = document.getElementById('register-age').value;
+      const location = document.getElementById('register-location').value;
+      const res = await fetch('http://127.0.0.1:5000/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, name, age: Number(age), location })
+      });
+      const data = await res.json();
+      if (data.status === 'ok') {
+        localStorage.setItem('userId', id);
+        window.location.href = 'dashboard.html';
+      } else {
+        message.textContent = data.msg || 'Registration failed.';
+      }
+    };
+  </script>
+</body>
+</html>
