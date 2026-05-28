@@ -41,8 +41,7 @@ function updateToggleUI() {
 
 // Load messages for the user
 async function loadMessages() {
-  await window.configPromise;
-  const res = await fetch(`${window.API_URL}/getMessages`, {
+  const res = await fetch('https://dynamic-contact-tracing-app.onrender.com/getMessages', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: userId })
@@ -50,7 +49,7 @@ async function loadMessages() {
   const data = await res.json();
   if (data.status === 'ok') {
     if (data.messages && data.messages.length > 0) {
-      messagesContent.innerHTML = data.messages.map(msg => 
+      messagesContent.innerHTML = data.messages.map(msg =>
         `<div class="mb-3 p-3 bg-white rounded border-l-4 border-red-500 shadow-sm">
           <p class="text-sm text-gray-800">${msg}</p>
         </div>`
@@ -65,9 +64,8 @@ async function loadMessages() {
 
 // Fetch and display profile, status, risk
 async function loadProfile() {
-  await window.configPromise;
   // Get exposure graph for user info
-  const res = await fetch(`${window.API_URL}/getExposureGraph`, {
+  const res = await fetch('https://dynamic-contact-tracing-app.onrender.com/getExposureGraph', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: userId })
@@ -85,24 +83,23 @@ async function loadProfile() {
   `;
   infectionStatus.textContent = me.status;
   infectionStatus.className = `ml-2 px-2 py-1 rounded ${me.status === 'infected' ? 'bg-red-500 text-white' : me.status === 'exposed' ? 'bg-yellow-400 text-black' : 'bg-green-500 text-white'}`;
-  
+
   // Update toggle state based on infection status
   isInfected = me.status === 'infected';
   updateToggleUI();
-  
+
   // Load messages
   await loadMessages();
-  
+
   // Draw graph
   drawGraph(data.graph);
 }
 
 // Toggle infection status
 infectionToggleBtn.onclick = async () => {
-  await window.configPromise;
   if (!isInfected) {
     // Mark as infected
-    const res = await fetch(`${window.API_URL}/markInfected`, {
+    const res = await fetch('https://dynamic-contact-tracing-app.onrender.com/markInfected', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: userId })
@@ -110,13 +107,13 @@ infectionToggleBtn.onclick = async () => {
     const data = await res.json();
     if (data.status === 'ok') {
       // Send automatic infection alert to contacts
-      const alertRes = await fetch(`${window.API_URL}/sendInfectionAlert`, {
+      const alertRes = await fetch('https://dynamic-contact-tracing-app.onrender.com/sendInfectionAlert', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: userId })
       });
       const alertData = await alertRes.json();
-      
+
       isInfected = true;
       updateToggleUI();
       showNotification('Marked as infected! Automatic alerts sent to contacts.', 'bg-red-600');
@@ -126,7 +123,7 @@ infectionToggleBtn.onclick = async () => {
     }
   } else {
     // Unmark as infected
-    const res = await fetch(`${window.API_URL}/unmarkInfected`, {
+    const res = await fetch('https://dynamic-contact-tracing-app.onrender.com/unmarkInfected', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: userId })
@@ -149,10 +146,9 @@ refreshBtn.onclick = loadProfile;
 // Add contacts
 addContactForm.onsubmit = async (e) => {
   e.preventDefault();
-  await window.configPromise;
   const ids = contactIdsInput.value.split(',').map(s => s.trim()).filter(Boolean);
   if (!ids.length) return;
-  const res = await fetch(`${window.API_URL}/addContact`, {
+  const res = await fetch('https://dynamic-contact-tracing-app.onrender.com/addContact', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: userId, contacts: ids })
@@ -170,10 +166,9 @@ addContactForm.onsubmit = async (e) => {
 // Remove contacts
 removeContactForm.onsubmit = async (e) => {
   e.preventDefault();
-  await window.configPromise;
   const ids = removeContactIdsInput.value.split(',').map(s => s.trim()).filter(Boolean);
   if (!ids.length) return;
-  const res = await fetch(`${window.API_URL}/removeContact`, {
+  const res = await fetch('https://dynamic-contact-tracing-app.onrender.com/removeContact', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: userId, contacts: ids })
@@ -200,26 +195,30 @@ function drawGraph(graph) {
     container: document.getElementById('cy'),
     elements: [],
     style: [
-      { selector: 'node', style: {
-        'label': 'data(label)',
-        'background-color': 'data(color)',
-        'text-valign': 'center',
-        'color': '#222',
-        'font-weight': 'bold',
-        'border-width': 2,
-        'border-color': '#888'
-      }},
-      { selector: 'edge', style: {
-        'width': 2,
-        'line-color': '#bbb',
-        'target-arrow-color': '#bbb',
-        'target-arrow-shape': 'triangle',
-        'curve-style': 'bezier'
-      }}
+      {
+        selector: 'node', style: {
+          'label': 'data(label)',
+          'background-color': 'data(color)',
+          'text-valign': 'center',
+          'color': '#222',
+          'font-weight': 'bold',
+          'border-width': 2,
+          'border-color': '#888'
+        }
+      },
+      {
+        selector: 'edge', style: {
+          'width': 2,
+          'line-color': '#bbb',
+          'target-arrow-color': '#bbb',
+          'target-arrow-shape': 'triangle',
+          'curve-style': 'bezier'
+        }
+      }
     ],
     layout: { name: 'cose', animate: true }
   });
-  
+
   // Add nodes
   Object.entries(graph).forEach(([id, node]) => {
     cy.add({
@@ -231,7 +230,7 @@ function drawGraph(graph) {
       }
     });
   });
-  
+
   // Add edges (prevent duplicates)
   const addedEdges = new Set();
   Object.entries(graph).forEach(([id, node]) => {
@@ -240,20 +239,20 @@ function drawGraph(graph) {
         // Create a unique edge ID (sorted to ensure consistency)
         const edgeId = [id, cid].sort().join('-');
         if (!addedEdges.has(edgeId)) {
-          cy.add({ 
-            group: 'edges', 
-            data: { 
-              id: edgeId, 
-              source: id, 
-              target: cid 
-            } 
+          cy.add({
+            group: 'edges',
+            data: {
+              id: edgeId,
+              source: id,
+              target: cid
+            }
           });
           addedEdges.add(edgeId);
         }
       }
     });
   });
-  
+
   cy.layout({ name: 'cose', animate: true }).run();
 }
 
